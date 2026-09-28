@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 import { useEffect, useMemo, useState } from "react";
 import { NavigationContainer } from "@react-navigation/native";
 import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
@@ -21,16 +22,35 @@ import {
 } from "./src/data/mockData";
 import { STORAGE_KEYS, readJson, writeJson } from "./src/storage/storage";
 import { calculatePoints } from "./src/utils/points";
+=======
+import { useRef, useState } from "react";
+import {
+  Pressable,
+  SafeAreaView,
+  ScrollView,
+  StyleSheet,
+  Text,
+  TextInput,
+  View,
+} from "react-native";
+>>>>>>> cf121c5 (Meus ajustes locais antes do pull)
 
 const Stack = createNativeStackNavigator();
 const Tab = createBottomTabNavigator();
 
 export default function App() {
+<<<<<<< HEAD
   const [users, setUsers] = useState<User[]>(initialUsers);
   const [currentUser, setCurrentUser] = useState<User | null>(null);
   const [entries, setEntries] = useState<MaterialEntry[]>(initialMaterialEntries);
   const [hasSeenOnboarding, setHasSeenOnboarding] = useState(false);
   const [isHydrated, setIsHydrated] = useState(false);
+=======
+  const scrollViewRef = useRef<ScrollView>(null);
+  const [email, setEmail] = useState("");
+  const [submitted, setSubmitted] = useState(false);
+  const [sectionOffsets, setSectionOffsets] = useState<Record<string, number>>({});
+>>>>>>> cf121c5 (Meus ajustes locais antes do pull)
 
   useEffect(() => {
     async function loadPersistedState() {
@@ -100,6 +120,7 @@ export default function App() {
     }
   }
 
+<<<<<<< HEAD
   function handleRegister(name: string, email: string, password: string, city: string) {
     const alreadyExists = users.some((user) => user.email.toLowerCase() === email.toLowerCase());
 
@@ -243,6 +264,150 @@ export default function App() {
         ) : null}
       </Stack.Navigator>
     </NavigationContainer>
+=======
+  function scrollToSection(section: "how-it-works" | "waitlist") {
+    const offset = sectionOffsets[section];
+
+    if (offset !== undefined) {
+      scrollViewRef.current?.scrollTo({ y: Math.max(offset - 16, 0), animated: true });
+    }
+  }
+
+  return (
+    <SafeAreaView style={styles.safeArea}>
+      <ScrollView ref={scrollViewRef} contentContainerStyle={styles.container}>
+        <View style={styles.header}>
+          <Text style={styles.logo}>
+            Troca<Text style={styles.logoAccent}>verde</Text>
+          </Text>
+          <Pressable
+            accessibilityRole="button"
+            onPress={() => scrollToSection("waitlist")}
+            style={styles.outlineButton}
+          >
+            <Text style={styles.outlineButtonText}>Entrar na lista</Text>
+          </Pressable>
+        </View>
+
+        <View style={styles.hero}>
+        
+          <Text style={styles.eyebrow}>UM APP PRA RECICLAGEM QUE ALIMENTA</Text>
+          <Text style={styles.heroTitle}>
+            Recicle.{"\n"}Troque.{"\n"}
+            <Text style={styles.orangeText}>Coma.</Text>
+          </Text>
+          <Text style={styles.heroDescription}>
+            Leve seus recicláveis limpos até um ponto de troca parceiro e volte
+            pra casa com frutas, legumes e verduras frescas, na hora.
+          </Text>
+          <View style={styles.actions}>
+            <Pressable
+              accessibilityRole="button"
+              onPress={() => scrollToSection("waitlist")}
+              style={styles.primaryButton}
+            >
+              <Text style={styles.primaryButtonText}>Entrar na lista de espera</Text>
+            </Pressable>
+            <Pressable
+              accessibilityRole="button"
+              onPress={() => scrollToSection("how-it-works")}
+              style={styles.outlineButton}
+            >
+              <Text style={styles.outlineButtonText}>Ver como funciona</Text>
+            </Pressable>
+          </View>
+          <View style={styles.stamp} accessibilityElementsHidden>
+            <Text style={styles.stampText}>2KG ♻️</Text>
+            <Text style={styles.stampEquals}>=</Text>
+            <Text style={styles.stampText}>1KG 🥬</Text>
+          </View>
+        </View>
+
+        <View
+          onLayout={(event) =>
+            setSectionOffsets((current) => ({
+              ...current,
+              "how-it-works": event.nativeEvent.layout.y,
+            }))
+          }
+          style={styles.section}
+          nativeID="how-it-works"
+        >
+          <Text style={styles.sectionLabel}>COMO FUNCIONA</Text>
+          <View style={styles.steps}>
+            {steps.map((step) => (
+              <View key={step.number} style={styles.step}>
+                <Text style={styles.stepNumber}>{step.number}</Text>
+                <Text style={styles.stepTitle}>{step.title}</Text>
+                <Text style={styles.bodyText}>{step.description}</Text>
+              </View>
+            ))}
+          </View>
+        </View>
+
+        <View style={styles.goals}>
+          <Text style={styles.sectionLabel}>METAS DO PILOTO</Text>
+          <View style={styles.goalGrid}>
+            <Goal value="500+" label="famílias no primeiro bairro" />
+            <Goal value="10" label="pontos de troca parceiros" />
+            <Goal value="5t" label="de recicláveis coletados por mês" />
+          </View>
+        </View>
+
+        <View style={styles.section}>
+          <Text style={styles.sectionLabel}>FEITO JUNTO COM</Text>
+          <View style={styles.partnerList}>
+            {partners.map((partner) => (
+              <View key={partner} style={styles.partnerTag}>
+                <Text style={styles.partnerText}>{partner}</Text>
+              </View>
+            ))}
+          </View>
+        </View>
+
+        <View
+          onLayout={(event) =>
+            setSectionOffsets((current) => ({
+              ...current,
+              waitlist: event.nativeEvent.layout.y,
+            }))
+          }
+          style={styles.cta}
+          nativeID="waitlist"
+        >
+          <Text style={styles.ctaTitle}>Quer levar o Trocaverde pro seu bairro?</Text>
+          <Text style={styles.bodyText}>
+            Deixe seu e-mail e avisamos assim que abrirmos um ponto de troca perto de você.
+          </Text>
+          {submitted ? (
+            <Text style={styles.successText}>E-mail recebido. Obrigado!</Text>
+          ) : (
+            <View style={styles.form}>
+              <TextInput
+                accessibilityLabel="Seu e-mail"
+                autoCapitalize="none"
+                keyboardType="email-address"
+                onChangeText={setEmail}
+                placeholder="seu@email.com"
+                placeholderTextColor="rgba(246, 241, 228, 0.4)"
+                style={styles.input}
+                value={email}
+              />
+              <Pressable
+                accessibilityRole="button"
+                onPress={submitEmail}
+                style={styles.primaryButton}
+              >
+                <Text style={styles.primaryButtonText}>Entrar na lista</Text>
+              </Pressable>
+            </View>
+          )}
+        </View>
+
+        <Text style={styles.footer}>Trocaverde - reciclagem que vira comida.</Text>
+      </ScrollView>
+    </SafeAreaView>
+>>>>>>> cf121c5 (Meus ajustes locais antes do pull)
   );
 }
 
