@@ -1,4 +1,4 @@
-# Troca Verde
+# Mesa Cheia
 
 Aplicativo de incentivo à reciclagem e troca por alimentos frescos. O objetivo central é transformar resíduos recicláveis em pontos, que podem ser trocados por itens de alimentação de hortas e parceiros locais.
 
